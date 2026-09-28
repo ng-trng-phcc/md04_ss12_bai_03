@@ -1,0 +1,20 @@
+server:
+  port: 8086
+
+spring:
+  application:
+    name: inventory-service
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:localhost:9092}
+    consumer:
+      group-id: inventory-group
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+      properties:
+        spring.json.trusted.packages: com.example.inventoryservice.event,com.example.orderservice.event
+        spring.json.value.default.type: com.example.inventoryservice.event.OrderCreatedEvent
+
+# product-service de tru kho (override qua env khi chay docker)
+product-service:
+  base-url: ${PRODUCT_SERVICE_URL:http://localhost:8082}
